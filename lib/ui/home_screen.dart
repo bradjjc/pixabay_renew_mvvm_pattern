@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pixabay_renew_mvvm_pattern/data/photo_provider.dart';
-import 'package:pixabay_renew_mvvm_pattern/data/pixabay_api.dart';
 import 'package:pixabay_renew_mvvm_pattern/model/photo.dart';
 import 'package:pixabay_renew_mvvm_pattern/ui/widget/photo_widget.dart';
 
@@ -13,8 +12,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _controller = TextEditingController();
-
-  List<Photo> _photos = [];
 
   @override
   void dispose() {
@@ -44,10 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: TextField(
               controller: _controller,
               onSubmitted: (value) async {
-                final photos = await photoProvider.api.fetch(_controller.text);
-                setState(() {
-                  _photos = photos;
-                });
+                photoProvider.fetch(value);
               },
               decoration: InputDecoration(
                 border: const OutlineInputBorder(
@@ -55,35 +49,40 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 suffixIcon: IconButton(
                   onPressed: () async {
-                    final photos =
-                        await photoProvider.api.fetch(_controller.text);
-                    setState(() {
-                      _photos = photos;
-                    });
+                    photoProvider.fetch(_controller.text);
                   },
                   icon: const Icon(Icons.search),
                 ),
               ),
             ),
           ),
-          Expanded(
-            child: GridView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: _photos.length, //item 개수
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, //1 개의 행에 보여줄 item 개수
-                mainAxisSpacing: 16, //수평 Padding
-                crossAxisSpacing: 16, //수직 Padding
-              ),
-              itemBuilder: (BuildContext context, int index) {
-                //item 의 반목문 항목 형성
-                final photo = _photos[index];
-                return PhotoWidget(
-                  photo: photo,
+          StreamBuilder<List<Photo>>(
+              stream: photoProvider.photoStream,
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const CircularProgressIndicator();
+                }
+                final photos = snapshot.data;
+                return Expanded(
+                  child: GridView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: photos!.length, //item 개수
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, //1 개의 행에 보여줄 item 개수
+                      mainAxisSpacing: 16, //수평 Padding
+                      crossAxisSpacing: 16, //수직 Padding
+                    ),
+                    itemBuilder: (BuildContext context, int index) {
+                      //item 의 반목문 항목 형성
+                      final photo = photos[index];
+                      return PhotoWidget(
+                        photo: photo,
+                      );
+                    },
+                  ),
                 );
-              },
-            ),
-          ),
+              }),
         ],
       ),
     );
