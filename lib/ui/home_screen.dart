@@ -1,9 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:pixabay_renew_mvvm_pattern/data/photo_provider.dart';
+import 'package:pixabay_renew_mvvm_pattern/data/pixabay_api.dart';
 import 'package:pixabay_renew_mvvm_pattern/model/photo.dart';
 import 'package:pixabay_renew_mvvm_pattern/ui/widget/photo_widget.dart';
-import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -14,19 +13,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _controller = TextEditingController();
-  List<Photo> _photos = [];
 
-  Future<List<Photo>> fetch(String quary) async {
-    String serchText = quary.replaceAll(' ', '+');
-    final response = await http.get(
-      Uri.parse(
-          'https://pixabay.com/api/?key=33944449-869c2910b825e571ac4fba36f&q=$serchText&image_type=photo'),
-    );
-    Map<String, dynamic> jsonResponse = jsonDecode(response.body);
-    // Iterable 반복자 타입
-    Iterable hits = jsonResponse['hits'];
-    return hits.map((e) => Photo.fromJson(e)).toList();
-  }
+  List<Photo> _photos = [];
 
   @override
   void dispose() {
@@ -37,6 +25,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final photoProvider = PhotoProvider.of(context);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -54,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: TextField(
               controller: _controller,
               onSubmitted: (value) async {
-                final photos = await fetch(_controller.text);
+                final photos = await photoProvider.api.fetch(_controller.text);
                 setState(() {
                   _photos = photos;
                 });
@@ -65,7 +55,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 suffixIcon: IconButton(
                   onPressed: () async {
-                    final photos = await fetch(_controller.text);
+                    final photos =
+                        await photoProvider.api.fetch(_controller.text);
                     setState(() {
                       _photos = photos;
                     });
