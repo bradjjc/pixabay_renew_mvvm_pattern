@@ -4,13 +4,16 @@ import 'package:pixabay_renew_mvvm_pattern/data/photo_api_repository.dart';
 import 'package:pixabay_renew_mvvm_pattern/model/photo.dart';
 
 class PixabayApi implements PhotoApiRepasitory {
-  final baseUrl = 'https://pixabay.com/api/';
-  final key = '33944449-869c2910b825e571ac4fba36f';
+  static const baseUrl = 'https://pixabay.com/api/';
+  static const key = '33944449-869c2910b825e571ac4fba36f';
 
   @override
-  Future<List<Photo>> fetch(String quary) async {
+  Future<List<Photo>> fetch(String quary, {http.Client? client}) async {
+    client ??= http.Client();
+
     String serchText = quary.replaceAll(' ', '+');
-    final response = await http.get(
+
+    final response = await client.get(
       Uri.parse('$baseUrl?key=$key&q=$serchText&image_type=photo'),
     );
     Map<String, dynamic> jsonResponse = jsonDecode(response.body);
