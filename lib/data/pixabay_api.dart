@@ -14,7 +14,7 @@ class PixabayApi implements PhotoApiRepasitory {
     String serchText = quary.replaceAll(' ', '+');
 
     final response = await client.get(
-      Uri.parse('$baseUrl?key=$key&q=$serchText&image_type=photo'),
+      Uri.parse('$baseUrl?key=$key&q=$serchText&image_type=photo&per_page=30'),
     );
     Map<String, dynamic> jsonResponse = jsonDecode(response.body);
     // Iterable 반복자 타입
