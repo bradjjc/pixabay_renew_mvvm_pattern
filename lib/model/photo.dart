@@ -1,27 +1,45 @@
-import 'package:equatable/equatable.dart';
+// import 'package:equatable/equatable.dart';
+// import 'package:json_annotation/json_annotation.dart';
+//
+// part 'photo.g.dart';
+//
+// @JsonSerializable()
+// // Equatable 을 상속 받으면 내부는 불변 객체
+// class Photo extends Equatable {
+//   final int id;
+//   final String tags;
+//   // 이름 맵핑
+//   @JsonKey(name: 'previewURL')
+//   final String previewUrl;
+//
+//   Photo({required this.id, required this.tags, required this.previewUrl});
+//
+//   factory Photo.fromJson(Map<String, dynamic> json) => _$PhotoFromJson(json);
+//
+//   /// Connect the generated [_$PersonToJson] function to the `toJson` method.
+//   Map<String, dynamic> toJson() => _$PhotoToJson(this);
+//
+//   @override
+//   // TODO: implement props
+//   List<Object?> get props => [id];
+// }
+
 import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'photo.freezed.dart';
 
 part 'photo.g.dart';
 
-@JsonSerializable()
-// Equatable 을 상속 받으면 내부는 불변 객체
-class Photo extends Equatable {
-  final int id;
-  final String tags;
-  // 이름 맵핑
-  @JsonKey(name: 'previewURL')
-  final String previewUrl;
-
-  Photo({required this.id, required this.tags, required this.previewUrl});
+@freezed
+class Photo with _$Photo {
+  factory Photo({
+    required int id,
+    required String tags,
+    @JsonKey(name: 'previewURL') required String previewUrl,
+  }) = _Photo;
 
   factory Photo.fromJson(Map<String, dynamic> json) => _$PhotoFromJson(json);
-
-  /// Connect the generated [_$PersonToJson] function to the `toJson` method.
-  Map<String, dynamic> toJson() => _$PhotoToJson(this);
-
-  @override
-  // TODO: implement props
-  List<Object?> get props => [id];
 }
 
 // class Photo {
