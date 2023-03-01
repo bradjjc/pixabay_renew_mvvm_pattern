@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.watch<HomeViewModel>();
+    // final viewModel = context.watch<HomeViewModel>();
     // final viewModel = Provider.of<HomeViewModel>(context);
 
     return Scaffold(
@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: TextField(
               controller: _controller,
               onSubmitted: (value) async {
-                viewModel.fetch(value);
+                context.read<HomeViewModel>().fetch(value);
               },
               decoration: InputDecoration(
                 border: const OutlineInputBorder(
@@ -51,40 +51,35 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 suffixIcon: IconButton(
                   onPressed: () async {
-                    viewModel.fetch(_controller.text);
+                    context.read<HomeViewModel>().fetch(_controller.text);
                   },
                   icon: const Icon(Icons.search),
                 ),
               ),
             ),
           ),
-          StreamBuilder<List<Photo>>(
-              stream: viewModel.photoStream,
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const CircularProgressIndicator();
-                }
-                final photos = snapshot.data;
-                return Expanded(
-                  child: GridView.builder(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: photos!.length, //item 개수
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2, //1 개의 행에 보여줄 item 개수
-                      mainAxisSpacing: 16, //수평 Padding
-                      crossAxisSpacing: 16, //수직 Padding
-                    ),
-                    itemBuilder: (BuildContext context, int index) {
-                      //item 의 반목문 항목 형성
-                      final photo = photos[index];
-                      return PhotoWidget(
-                        photo: photo,
-                      );
-                    },
+          Consumer<HomeViewModel>(
+            builder: (_, viewModel, child) {
+              return Expanded(
+                child: GridView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: viewModel.photos.length, //item 개수
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2, //1 개의 행에 보여줄 item 개수
+                    mainAxisSpacing: 16, //수평 Padding
+                    crossAxisSpacing: 16, //수직 Padding
                   ),
-                );
-              }),
+                  itemBuilder: (BuildContext context, int index) {
+                    //item 의 반목문 항목 형성
+                    final photo = viewModel.photos[index];
+                    return PhotoWidget(
+                      photo: photo,
+                    );
+                  },
+                ),
+              );
+            },
+          ),
         ],
       ),
     );
