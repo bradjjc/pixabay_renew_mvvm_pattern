@@ -3,7 +3,9 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:http/http.dart' as http;
 import 'package:pixabay_renew_mvvm_pattern/data/data_source/pixabay_api.dart';
+import 'package:pixabay_renew_mvvm_pattern/data/data_source/result.dart';
 import 'package:pixabay_renew_mvvm_pattern/data/repositiry/photo_api_repository_impl.dart';
+import 'package:pixabay_renew_mvvm_pattern/domain/model/photo.dart';
 
 import 'pixabay_api_test.mocks.dart';
 
@@ -20,10 +22,10 @@ void main() {
           '${PixabayApi.baseUrl}?key=${PixabayApi.key}&q=iphone&image_type=photo&per_page=30'),
     )).thenAnswer((_) async => http.Response(fackJsonBody, 200));
 
-    final result = await api.fetch('iphone');
+    final Result<List<Photo>> result = await api.fetch('iphone');
 
     // expect(result.length, 20);
-    expect(result.first.id, 2681039);
+    expect((result as Success<List<Photo>>).data.first.id, 2681039);
 
     // 검증 하기
     verify(client.get(
