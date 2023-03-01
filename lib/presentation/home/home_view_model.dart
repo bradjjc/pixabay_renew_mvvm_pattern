@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:collection';
 import 'package:flutter/material.dart';
-import 'package:pixabay_renew_mvvm_pattern/data/photo_api_repository.dart';
-import 'package:pixabay_renew_mvvm_pattern/model/photo.dart';
+import 'package:pixabay_renew_mvvm_pattern/domain/repositiry/photo_api_repository.dart';
+import 'package:pixabay_renew_mvvm_pattern/domain/model/photo.dart';
 
 class HomeViewModel with ChangeNotifier {
   final PhotoApiRepasitory repasitory;

@@ -1,8 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:pixabay_renew_mvvm_pattern/data/pixabay_api.dart';
 import 'package:http/http.dart' as http;
+import 'package:pixabay_renew_mvvm_pattern/data/data_source/pixabay_api.dart';
+import 'package:pixabay_renew_mvvm_pattern/data/repositiry/photo_api_repository_impl.dart';
 
 import 'pixabay_api_test.mocks.dart';
 
@@ -11,16 +12,15 @@ import 'pixabay_api_test.mocks.dart';
 @GenerateMocks([http.Client])
 void main() {
   test("Pixabay data is well coming", () async {
-    final api = PixabayApi();
-
-    final client = MockClient();
+    final client = new MockClient();
+    final api = PhotoApiRepositiryImpl(PixabayApi(client));
 
     when(client.get(
       Uri.parse(
           '${PixabayApi.baseUrl}?key=${PixabayApi.key}&q=iphone&image_type=photo&per_page=30'),
     )).thenAnswer((_) async => http.Response(fackJsonBody, 200));
 
-    final result = await api.fetch('iphone', client: client);
+    final result = await api.fetch('iphone');
 
     // expect(result.length, 20);
     expect(result.first.id, 2681039);

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pixabay_renew_mvvm_pattern/model/photo.dart';
+import 'package:pixabay_renew_mvvm_pattern/domain/model/photo.dart';
 
 class PhotoWidget extends StatelessWidget {
   final Photo photo;

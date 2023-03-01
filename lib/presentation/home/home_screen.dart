@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pixabay_renew_mvvm_pattern/model/photo.dart';
-import 'package:pixabay_renew_mvvm_pattern/ui/home_view_model.dart';
-import 'package:pixabay_renew_mvvm_pattern/ui/widget/photo_widget.dart';
+import 'package:pixabay_renew_mvvm_pattern/presentation/home/home_view_model.dart';
+import 'package:pixabay_renew_mvvm_pattern/presentation/home/components/photo_widget.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -23,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final viewModel = context.watch<HomeViewModel>();
+    final viewModel = context.watch<HomeViewModel>();
     // final viewModel = Provider.of<HomeViewModel>(context);
 
     return Scaffold(
@@ -43,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: TextField(
               controller: _controller,
               onSubmitted: (value) async {
-                context.read<HomeViewModel>().fetch(value);
+                viewModel.fetch(value);
               },
               decoration: InputDecoration(
                 border: const OutlineInputBorder(
@@ -51,34 +50,30 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 suffixIcon: IconButton(
                   onPressed: () async {
-                    context.read<HomeViewModel>().fetch(_controller.text);
+                    viewModel.fetch(_controller.text);
                   },
                   icon: const Icon(Icons.search),
                 ),
               ),
             ),
           ),
-          Consumer<HomeViewModel>(
-            builder: (_, viewModel, child) {
-              return Expanded(
-                child: GridView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: viewModel.photos.length, //item 개수
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, //1 개의 행에 보여줄 item 개수
-                    mainAxisSpacing: 16, //수평 Padding
-                    crossAxisSpacing: 16, //수직 Padding
-                  ),
-                  itemBuilder: (BuildContext context, int index) {
-                    //item 의 반목문 항목 형성
-                    final photo = viewModel.photos[index];
-                    return PhotoWidget(
-                      photo: photo,
-                    );
-                  },
-                ),
-              );
-            },
+          Expanded(
+            child: GridView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: viewModel.photos.length, //item 개수
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, //1 개의 행에 보여줄 item 개수
+                mainAxisSpacing: 16, //수평 Padding
+                crossAxisSpacing: 16, //수직 Padding
+              ),
+              itemBuilder: (BuildContext context, int index) {
+                //item 의 반목문 항목 형성
+                final photo = viewModel.photos[index];
+                return PhotoWidget(
+                  photo: photo,
+                );
+              },
+            ),
           ),
         ],
       ),

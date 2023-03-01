@@ -1,8 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pixabay_renew_mvvm_pattern/data/photo_api_repository.dart';
-import 'package:pixabay_renew_mvvm_pattern/data/pixabay_api.dart';
-import 'package:pixabay_renew_mvvm_pattern/model/photo.dart';
-import 'package:pixabay_renew_mvvm_pattern/ui/home_view_model.dart';
+import 'package:pixabay_renew_mvvm_pattern/domain/repositiry/photo_api_repository.dart';
+import 'package:pixabay_renew_mvvm_pattern/domain/model/photo.dart';
+import 'package:pixabay_renew_mvvm_pattern/presentation/home/home_view_model.dart';
 
 void main() {
   test('Stream is running well', () async {
