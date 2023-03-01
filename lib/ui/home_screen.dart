@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:pixabay_renew_mvvm_pattern/data/photo_provider.dart';
 import 'package:pixabay_renew_mvvm_pattern/model/photo.dart';
+import 'package:pixabay_renew_mvvm_pattern/ui/home_view_model.dart';
 import 'package:pixabay_renew_mvvm_pattern/ui/widget/photo_widget.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -22,7 +23,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = PhotoProvider.of(context).viewModel;
+    final viewModel = context.watch<HomeViewModel>();
+    // final viewModel = Provider.of<HomeViewModel>(context);
 
     return Scaffold(
       appBar: AppBar(
