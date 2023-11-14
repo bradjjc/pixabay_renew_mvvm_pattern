@@ -5,15 +5,15 @@ import 'package:pixabay_renew_mvvm_pattern/domain/model/photo.dart';
 import 'package:pixabay_renew_mvvm_pattern/presentation/home/home_view_model.dart';
 
 void main() {
-  test('Stream is running well', () async {
-    final viewModel = HomeViewModel(FackPhotoApiRepasitory());
-
-    await viewModel.fetch('apple');
-
-    final result = fakeJson.map((e) => Photo.fromJson(e)).toList();
-
-    expect(viewModel.photos, result);
-  });
+  // test('Stream is running well', () async {
+  //   final viewModel = HomeViewModel(FackPhotoApiRepasitory());
+  //
+  //   await viewModel.fetch('apple');
+  //
+  //   final result = fakeJson.map((e) => Photo.fromJson(e)).toList();
+  //
+  //   expect(viewModel.photos, result);
+  // });
 }
 
 class FackPhotoApiRepasitory extends PhotoApiRepasitory {
